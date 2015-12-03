@@ -91,16 +91,6 @@ public class Server{
 			public void run() {
 				try {
 					//开始运行时依次执行以下语句，实现部署
-					//撤防指令
-					outStream.write("AT+CDAM=1".getBytes());
-					outStream.flush();
-					System.out.println("服务器说:--->>AT+CDAM=1");
-					Thread.sleep(500);
-					//撤防确认
-					outStream.write("AT+CDAM=1".getBytes());
-					outStream.flush();
-					System.out.println("服务器说:--->>AT+CDAM=1");
-					Thread.sleep(500);
 					//布防指令
 					outStream.write("AT+CARM=1".getBytes());
 					outStream.flush();
