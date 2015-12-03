@@ -51,7 +51,7 @@ public class Server{
 			inStream = socket.getInputStream();// 获取输入流
 			outStream = socket.getOutputStream();// 获取输出流
 		} catch (Exception e) {
-			System.out.println("服务端监听客户端出现故障！");
+			System.out.println("服务端初始化输入输出流出现故障！");
 			e.printStackTrace();
 		}
 	}
@@ -83,6 +83,47 @@ public class Server{
 		}.start();
 	}
 
+	/**
+	 * 在程序中自动发送初始化指令
+	 */
+	public void serverSayCMD() {
+		new Thread() {
+			public void run() {
+				try {
+					//开始运行时依次执行以下语句，实现部署
+					//撤防指令
+					outStream.write("AT+CDAM=1".getBytes());
+					outStream.flush();
+					System.out.println("服务器说:--->>AT+CDAM=1");
+					Thread.sleep(500);
+					//撤防确认
+					outStream.write("AT+CDAM=1".getBytes());
+					outStream.flush();
+					System.out.println("服务器说:--->>AT+CDAM=1");
+					Thread.sleep(500);
+					//布防指令
+					outStream.write("AT+CARM=1".getBytes());
+					outStream.flush();
+					System.out.println("服务器说:--->>AT+CARM=1");
+					Thread.sleep(500);
+					//布防确认
+					outStream.write("AT+CARM=1".getBytes());
+					outStream.flush();
+					System.out.println("服务器说:--->>AT+CARM=1");
+					Thread.sleep(500);
+					//异步指令
+					outStream.write("AT+CWMSG=SET,0,1".getBytes());
+					outStream.flush();
+					System.out.println("服务器说:--->>AT+CWMSG=SET,0,1");
+					
+				} catch (Exception e) {
+					System.out.println("在程序中自动发送初始化指令时出现故障！");
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+	
 	/**
 	 * 监听报警客户端发出的信息,并解析处理
 	 */
@@ -204,45 +245,13 @@ public class Server{
 	public static void main(String args[]) throws Exception {
 		System.out.println("====================创建服务器端，192.168.1.230侦听8099端口==================");
 		ss = new ServerSocket(8099);
-		boolean flag = true;//程序是否第一次执行, true:表示第一次执行
 		while(true){
 			Socket s = ss.accept();
 			System.out.println("有客户连接上了：" + s.getInetAddress() + ":" + s.getPort());
 			Server server = new Server(s);
 			server.listen();
 			server.serverSay();
-			if(flag){
-				//开始运行时依次执行以下语句，实现部署
-				server.outStream.write("AT+CDAM=1".getBytes());
-				server.outStream.flush();
-				System.out.println("服务器说:--->>AT+CDAM=1");
-				Thread.sleep(1000);
-				
-				server.outStream.write("AT+CDAM=1".getBytes());
-				server.outStream.flush();
-				System.out.println("服务器说:--->>AT+CDAM=1");
-				Thread.sleep(1000);
-				
-				server.outStream.write("AT+CARM=1".getBytes());
-				server.outStream.flush();
-				System.out.println("服务器说:--->>AT+CARM=1");
-				Thread.sleep(1000);
-				
-				server.outStream.write("AT+CARM=1".getBytes());
-				server.outStream.flush();
-				System.out.println("服务器说:--->>AT+CARM=1");
-				Thread.sleep(1000);
-				
-				server.outStream.write("AT+CWMSG=SET,0,1".getBytes());
-				server.outStream.flush();
-				System.out.println("服务器说:--->>AT+CWMSG=SET,0,1");
-				Thread.sleep(1000);
-				
-				server.outStream.write("AT+CWMSG=SET,0,1".getBytes());
-				server.outStream.flush();
-				System.out.println("服务器说:--->>AT+CWMSG=SET,0,1");
-				flag = false;//设置为第一次执行完毕,下次不会再次执行,保证只有每次启动的时候执行
-			}
+			server.serverSayCMD();
 		}
 		
 //		long b = System.currentTimeMillis();
