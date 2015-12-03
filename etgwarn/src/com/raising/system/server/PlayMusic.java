@@ -15,7 +15,7 @@ public class PlayMusic {
 		play(PASS_MUSIC);//暂时只支持wav格式,并且音频文件需要放在项目根路径下
 		Thread.sleep(1000);
 		play(WARN_MUSIC);
-		Thread.sleep(1000); 
+		Thread.sleep(1000);
 	}
 	public static void play(String fileName){
 		try {
