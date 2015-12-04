@@ -92,17 +92,17 @@ public class Server{
 				try {
 					//开始运行时依次执行以下语句，实现部署
 					//布防指令
-					outStream.write("AT+CARM=1".getBytes());
+					outStream.write("AT+CARM=1\r\n".getBytes());
 					outStream.flush();
 					System.out.println("服务器说:--->>AT+CARM=1");
 					Thread.sleep(500);
 					//布防确认
-					outStream.write("AT+CARM=1".getBytes());
+					outStream.write("AT+CARM=1\r\n".getBytes());
 					outStream.flush();
 					System.out.println("服务器说:--->>AT+CARM=1");
 					Thread.sleep(500);
 					//异步指令
-					outStream.write("AT+CWMSG=SET,0,1".getBytes());
+					outStream.write("AT+CWMSG=SET,0,1\r\n".getBytes());
 					outStream.flush();
 					System.out.println("服务器说:--->>AT+CWMSG=SET,0,1");
 					
